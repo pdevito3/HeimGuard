@@ -1,0 +1,21 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{89045AE9-2215-4B51-96D9-0EF49A0CF6B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeimGuard", "src\HeimGuard\HeimGuard.csproj", "{57C6135E-802F-42BF-AED5-DD3B56BC9DE2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{57C6135E-802F-42BF-AED5-DD3B56BC9DE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57C6135E-802F-42BF-AED5-DD3B56BC9DE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57C6135E-802F-42BF-AED5-DD3B56BC9DE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57C6135E-802F-42BF-AED5-DD3B56BC9DE2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{57C6135E-802F-42BF-AED5-DD3B56BC9DE2} = {89045AE9-2215-4B51-96D9-0EF49A0CF6B7}
+	EndGlobalSection
+EndGlobal

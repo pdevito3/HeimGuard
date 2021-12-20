@@ -86,7 +86,7 @@ public class SimpleUserPolicyHandler : IUserPolicyHandler
           .Select(r => r.Value)
           .ToArray();
       
-      	// this gets there permissions based on their roles. in this example, it's just using a static list
+      	// this gets their permissions based on their roles. in this example, it's just using a static list
         var permissions = DummyPermissionStore.GetPermissions()
             .Where(p => p.Roles.Any(r => roles.Contains(r)))
             .Select(p => p.Name)
@@ -318,7 +318,7 @@ public class SimpleUserPolicyHandler : IUserPolicyHandler
       	// this gets the user's role(s) from their ClaimsPrincipal
         var roles = user.Claims.Where(c => c.Type == ClaimTypes.Role).Select(r => r.Value).ToArray();
       
-      	// this gets there permissions based on their roles. in this example, it's just using a static list
+      	// this gets their permissions based on their roles. in this example, it's just using a static list
         var permissions = SimplePermissionStore.GetPermissions()
             .Where(p => p.Roles.Any(r => roles.Contains(r)))
             .Select(p => p.Name)

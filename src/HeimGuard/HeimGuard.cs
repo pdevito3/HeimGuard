@@ -27,7 +27,7 @@ public class HeimGuard : IHeimGuard
 
     public async Task<bool> HasPermissionAsync(string permission)
     {
-        var policy = await _userPolicyHandler.GetUserPolicy();
-        return policy.Permissions.Contains(permission);
+        var policy = await _userPolicyHandler.GetUserPermissions();
+        return policy.Contains(permission);
     }
 }

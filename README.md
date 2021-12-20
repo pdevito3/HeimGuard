@@ -109,9 +109,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-You'll notice two other methods extending `AddHeimGuard`. Nether are required, but they do make your life easier.
-
-- 
+You'll notice two other methods extending `AddHeimGuard`. Nether are required, but they do make your life easier. For more details, check out [HeimGuard Enhancements](#heimguard-enhancements).
 
 ## Introduction
 

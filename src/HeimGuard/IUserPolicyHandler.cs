@@ -1,15 +1,13 @@
 namespace HeimGuard;
 
-using Models;
-
 /// <summary>
-/// Provides an abstraction for handling the role:permission mappings for a given user in a <see cref="UserPolicy"/>. 
+/// Provides an abstraction for handling the role:permission mappings for a given user in am IEnumerable of strings. 
 /// </summary>
 public interface IUserPolicyHandler
 {
     /// <summary>
-    /// Returns a <see cref="UserPolicy"/> to track a distinct list of a given user's roles and permissions.
+    /// Returns an IEnumerable of strings that represents a distinct list of a given user's permissions.
     /// </summary>
-    /// <returns><see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous operation, containing the <see cref="UserPolicy"/> for the current user..</returns>
-    Task<UserPolicy> GetUserPolicy();
+    /// <returns><see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous operation, containing the list of peermissions for the current user..</returns>
+    Task<IEnumerable<string>> GetUserPermissions();
 }

@@ -172,7 +172,7 @@ Before you get HeimGuard set up, make sure that your authorization policies are 
    services.AddAuthorization(options =>
    {
        options.AddPolicy("RecipesFullAccess",
-               policy => policy.RequireClaim("permission", "RecipesFullAccess"));
+           policy => policy.RequireClaim("permission", "RecipesFullAccess"));
    });
    ```
 
@@ -193,7 +193,7 @@ public class RecipesController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-				return Ok()
+    	return Ok()
     }
 }
 ```
@@ -316,7 +316,10 @@ public class SimpleUserPolicyHandler : IUserPolicyHandler
         if (user == null) throw new ArgumentNullException(nameof(user));
 				
       	// this gets the user's role(s) from their ClaimsPrincipal
-        var roles = user.Claims.Where(c => c.Type == ClaimTypes.Role).Select(r => r.Value).ToArray();
+        var roles = user
+          .Claims.Where(c => c.Type == ClaimTypes.Role)
+          .Select(r => r.Value)
+          .ToArray();
       
       	// this gets their permissions based on their roles. in this example, it's just using a static list
         var permissions = SimplePermissionStore.GetPermissions()
@@ -375,8 +378,8 @@ Once you have your `IUserPolicyHandler` implementation set up, just go to your s
 ```c#
 public void ConfigureServices(IServiceCollection services)
 {
-  	//...
-  	services.AddHeimGuard<SimpleUserPolicyHandler>()
+    //...
+    services.AddHeimGuard<SimpleUserPolicyHandler>()
       .AutomaticallyCheckPermissions()
       .MapAuthorizationPolicies();
 	  // OR...
@@ -416,7 +419,7 @@ There are currently two extensions on HeimGuard that are both optional but highl
       [HttpGet]
       public IActionResult Get()
       {
-  				return _heimGuard.HasPermissionAsync("RecipesFullAccess") 
+          return _heimGuard.HasPermissionAsync("RecipesFullAccess") 
             ? Ok()
             : Forbidden();
       }
@@ -431,7 +434,7 @@ There are currently two extensions on HeimGuard that are both optional but highl
   services.AddAuthorization(options =>
   {
       options.AddPolicy("RecipesFullAccess",
-              policy => policy.RequireClaim("permission", "RecipesFullAccess"));
+          policy => policy.RequireClaim("permission", "RecipesFullAccess"));
   });
   ```
 
@@ -473,20 +476,20 @@ public class RecipesController : ControllerBase
     }
     
     [HttpGet]
-		[Authorize(Policy = "RecipesFullAccess")]
+    [Authorize(Policy = "RecipesFullAccess")]
     public IActionResult Get()
     {
-				return Ok();
+      	return Ok();
     }
     
     [HttpGet]
 		[Authorize]
     public IActionResult Get()
     {
-				var requirement = new CustomRequirement();
+      	var requirement = new CustomRequirement();
       
       	// this call with involk the custom handler that uses HeimGuard
-				var result = _authService.AuthorizeAsync(User, null, requirement);
+      	var result = _authService.AuthorizeAsync(User, null, requirement);
       	
       	return result.Succedded 
           ? Ok()

@@ -6,7 +6,7 @@ namespace HeimGuard
     /// <summary>
     /// The handler that interacts with the policy handler to expose guard methods for your user permissions.
     /// </summary>
-    public interface IHeimGuard
+    public interface IHeimGuardClient
     {
         /// <summary>
         /// Determines whether the user has a particular permission.
@@ -16,14 +16,14 @@ namespace HeimGuard
         Task<bool> HasPermissionAsync(string permission);
     }
 
-    public class HeimGuard : IHeimGuard
+    public class HeimGuardClient : IHeimGuardClient
     {
         private readonly IUserPolicyHandler _userPolicyHandler;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HeimGuard"/> class.
+        /// Initializes a new instance of the <see cref="HeimGuardClient"/> class.
         /// </summary>
-        public HeimGuard(IUserPolicyHandler userPolicyHandler)
+        public HeimGuardClient(IUserPolicyHandler userPolicyHandler)
         {
             _userPolicyHandler = userPolicyHandler;
         }

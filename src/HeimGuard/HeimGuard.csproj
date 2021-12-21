@@ -22,9 +22,9 @@
     </ItemGroup>
 
     <PropertyGroup>
-        <AssemblyVersion>0.1.0</AssemblyVersion>
-        <FileVersion>0.1.0</FileVersion>
-        <Version>0.1.0</Version>
+        <AssemblyVersion>0.1.1</AssemblyVersion>
+        <FileVersion>0.1.1</FileVersion>
+        <Version>0.1.1</Version>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/pdevito3/heimguard</RepositoryUrl>
         <RepositoryType>git</RepositoryType>

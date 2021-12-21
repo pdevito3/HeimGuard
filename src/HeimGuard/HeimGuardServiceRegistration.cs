@@ -13,7 +13,7 @@ public static class HeimGuardServiceRegistration
         where TUserPolicyHandler : class, IUserPolicyHandler
     {
         services.AddScoped<IUserPolicyHandler, TUserPolicyHandler>();
-        services.AddTransient<IHeimGuard, HeimGuard>();
+        services.AddTransient<IHeimGuardClient, HeimGuardClient>();
 
         return new HeimGuardBuilder(services);
     }

@@ -409,9 +409,9 @@ There are currently two extensions on HeimGuard that are both optional but highl
   [Authorize]
   public class RecipesController : ControllerBase
   {
-      private readonly IHeimGuard _heimGuard;
+      private readonly IHeimGuardClient _heimGuard;
   
-      public RecipesController(IHeimGuard heimGuard)
+      public RecipesController(IHeimGuardClient heimGuard)
       {
           _heimGuard = heimGuard;
       }

@@ -13,11 +13,11 @@ internal class PermissionRequirement : IAuthorizationRequirement
 
 internal class PermissionHandler : AuthorizationHandler<PermissionRequirement>
 {
-    private readonly IHeimGuard _guard;
+    private readonly IHeimGuardClient _guardClient;
 
-    public PermissionHandler(IHeimGuard guard)
+    public PermissionHandler(IHeimGuardClient guardClient)
     {
-        _guard = guard;
+        _guardClient = guardClient;
     }
 
     /// <summary>
@@ -26,7 +26,7 @@ internal class PermissionHandler : AuthorizationHandler<PermissionRequirement>
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
     {
         // no cancellation token available on AuthorizationHandler: https://github.com/aspnet/Security/issues/1598
-        if (await _guard.HasPermissionAsync(requirement.Name))
+        if (await _guardClient.HasPermissionAsync(requirement.Name))
         {
             context.Succeed(requirement);
         }

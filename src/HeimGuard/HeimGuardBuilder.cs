@@ -1,41 +1,43 @@
-namespace HeimGuard;
-
-using AutoPolicy;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.DependencyInjection;
-
-/// <summary>
-/// Builder for HeimGuard DI
-/// </summary>
-public class HeimGuardBuilder
+namespace HeimGuard
 {
-    public IServiceCollection Services { get; }
-
-    public HeimGuardBuilder(IServiceCollection services)
-    {
-        Services = services;
-    }
+    using AutoPolicy;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
-    /// Automatically maps authorization attributes to ASP.NET Core authorization policies that haven't already been
-    /// added.
+    /// Builder for HeimGuard DI
     /// </summary>
-    public HeimGuardBuilder MapAuthorizationPolicies()
+    public class HeimGuardBuilder
     {
-        Services.AddAuthorizationCore();
-        Services.AddTransient<IAuthorizationPolicyProvider, HeimGuardAuthorizationPolicyProvider>();
+        public IServiceCollection Services { get; }
 
-        return this;
-    }
+        public HeimGuardBuilder(IServiceCollection services)
+        {
+            Services = services;
+        }
 
-    /// <summary>
-    /// Automatically checks user permissions when an authorization attribute is used. 
-    /// </summary>
-    public HeimGuardBuilder AutomaticallyCheckPermissions()
-    {
-        Services.AddHttpContextAccessor();
-        Services.AddTransient<IAuthorizationHandler, PermissionHandler>();
+        /// <summary>
+        /// Automatically maps authorization attributes to ASP.NET Core authorization policies that haven't already been
+        /// added.
+        /// </summary>
+        public HeimGuardBuilder MapAuthorizationPolicies()
+        {
+            Services.AddAuthorizationCore();
+            Services.AddTransient<IAuthorizationPolicyProvider, HeimGuardAuthorizationPolicyProvider>();
 
-        return this;
+            return this;
+        }
+
+        /// <summary>
+        /// Automatically checks user permissions when an authorization attribute is used. 
+        /// </summary>
+        public HeimGuardBuilder AutomaticallyCheckPermissions()
+        {
+            Services.AddHttpContextAccessor();
+            Services.AddTransient<IAuthorizationHandler, PermissionHandler>();
+
+            return this;
+        }
     }
 }
+

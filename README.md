@@ -468,7 +468,7 @@ using Microsoft.AspNetCore.Mvc;
 [Route("recipes")]
 public class RecipesController : ControllerBase
 {
-    private readonly IHeimGuard _authService;
+    private readonly IAuthorizationService _authService;
 
     public RecipesController(IAuthorizationService authService)
     {

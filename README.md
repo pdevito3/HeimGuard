@@ -1,8 +1,13 @@
+<p>
+    <a href="https://github.com/pdevito3/heimguard/releases"><img src="https://img.shields.io/nuget/v/heimguard.svg" alt="Latest Release"></a>   
+    <a href="https://github.com/pdevito3/heimguard/blob/master/LICENSE.txt"><img src ="https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000" alt="License"></a>
+</p>
+
 ## What is HeimGuard?
 
 HeimGuard is a small and simple library, inspired by [PolicyServer](https://policyserver.io/) and [this talk](https://www.youtube.com/watch?v=Dlrf85NTuAU) by Dominick Baier, built to allow you to easily manage permissions in your .NET projects.
 
-HeimGuard is simple and flexible by design and I hope that it will help many development teams in the .NET community. With that said, it is quite bare bones. If you need a more robust solution, I strongly recommend checking out the commerical version of [Policy Server](https://solliance.net/products/policyserver) for a much more expansive list of features and capabilities.
+>  ⭐️ HeimGuard is simple and flexible by design and I hope that it will help many development teams in the .NET community. With that said, it is quite bare bones. If you need a more robust solution, I strongly recommend checking out the commercial version of [Policy Server](https://solliance.net/products/policyserver) for a much more expansive list of features and capabilities.
 
 ## Quickstart
 
@@ -36,7 +41,7 @@ Next, I'm going to put my user's role in my `ClaimPrincipal`. This isn't require
 }
 ```
 
-Now I'm going to implement an interface from HeimGuard called `UserPolicyHandler`. This handler is responsible for implementing your permissions lookup for your user. It should return an `IEnumerable<string>` that stores all of the permissions that your user has available to them. 
+Now I'm going to implement an interface from HeimGuard called `IUserPolicyHandler`. This handler is responsible for implementing your permissions lookup for your user. It should return an `IEnumerable<string>` that stores all of the permissions that your user has available to them. 
 
 **HeimGuard doesn't care how you store permissions and how you access them.** For simplicity sake in the example below, I'm just grabbing a static list, but this could just as easily come from a database or some external administration boundary and could be in whatever shape you want.
 
@@ -116,7 +121,7 @@ You'll notice two other methods extending `AddHeimGuard`. Nether are required, b
 Let's start by differentiating 3 different levels of permissions:
 
 - **Application access**: these are generally configured in your auth server and passed along in your token (e.g. using audience (`aud`) claim to determine what apis a token can be used in).
-- **Feature access**: role-permission checks in a particular application boundary (e.g. can a user perform some action).
+- **Feature access**: permission specific check in a particular application boundary (e.g. can a user perform some action).
 - **Application logic**: custom business logic specific to your application (e.g. given this certain set of criteria, can a user perform some action).
 
 The goal with HeimGuard is to easily manage user’s permissions around the feature access scope of permissions in your .NET apps using the built in .NET policies you’re familiar with.
@@ -146,7 +151,7 @@ This can work, but but there are some downside here:
 - You don't have boundary permission context. Let's look at a couple examples:
   - As mentioned above, we generally use the `aud` claim (or maybe some custom one) to determine what apis your security token can be used in. So in the example above we have `  "aud": ["api1", "api2"],` and one of my permissions is `ManageRecipe`. What if I am allowed to manage recipes in `api1` but not `api2`? You could prefix them with something like `api1.ManageRecipe`, but that adds coupling, domain logic, and becomes a huge multipler in the amount of claims being passed around.
   - Say I have a permission `CanDrinkAlcohol` but depending on where I’m at in the world it may or may not be true based on my age. I could tag it with something like `US.CanDrink`, `UK.CanDrink`, etc. but this would be far from ideal for a variety of reasons.
-- Tokens are only given at authentication time, so if you need to update permissions, you need to invalidate all the issued tokens every time you make an update. You coudl also make token lifetimes very short to get more up to date info more often, but that is not ideal either and still has coupling of identity and permissions.
+- Tokens are only given at authentication time, so if you need to update permissions, you need to invalidate all the issued tokens every time you make an update. You could also make token lifetimes very short to get more up to date info more often, but that is not ideal either and still has coupling of identity and permissions.
 
 So, what do we do? Well we can still get identity state from our identity server like we usually do. Usually, that should include some kind of role or set of roles that the user has been assigned to. These roles can then be mapped to permissions and used as a reference to a group of permissions.
 
@@ -154,7 +159,7 @@ So, what do we do? Well we can still get identity state from our identity server
 
 So we have our user and their identity roles from our auth token, but how do we know what permissions go with our roles? Well, this can be done in a variety of ways to whatever suits your needs best for your api. 
 
-If you have a simple API or an API that rarely has modified permissions, maybe you just want keep a static list of role to permissions mappings in a class in your project. More commonly, you'll probably want to persist them in a database somewhere. This could be in your boundary/application database or it could be in a separate administration boundary. Maybe you have both and use eventual consistancy to keep them in sync. You could even add a caching layer on top of this as well and reference that.
+If you have a simple API or an API that rarely has modified permissions, maybe you just want keep a static list of role to permissions mappings in a class in your project or in your appsettings. More commonly, you'll probably want to persist them in a database somewhere. This could be in your boundary/application database or it could be in a separate administration boundary. Maybe you have both and use eventual consistency to keep them in sync. You could even add a caching layer on top of this as well and reference that.
 
 At the end of the day, you can store your permission to role mappings anywhere you want, but you still need a way to easily access them and integrate them into your permissions pipeline. This is where HeimGuard comes in.
 

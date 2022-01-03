@@ -107,7 +107,7 @@ Now, all we have to do is register our `SimpleUserPolicyHandler` with `AddHeimGu
 ```c#
 public void ConfigureServices(IServiceCollection services)
 {
-	  //... other services
+    //... other services
     services.AddHeimGuard<SimpleUserPolicyHandler>()
       .AutomaticallyCheckPermissions()
       .MapAuthorizationPolicies();
@@ -443,7 +443,7 @@ There are currently two extensions on HeimGuard that are both optional but highl
   });
   ```
 
-> 🧳 Note that if you manually register anything in here it will rake presidence over the dynamically added policy.
+> 🧳 Note that if you manually register anything in here it will take presidence over the dynamically added policy.
 
 ## Custom Policies
 

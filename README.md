@@ -554,3 +554,6 @@ options.AddPolicy("ThisThingOrThatThing", policy =>
             (c.Type == "ThisThing" ||
              c.Type == "ThatThing"))));
 ```
+
+## Example
+Check out [this example project](https://github.com/pdevito3/HeimGuardExamplePermissions) for one of many options for setting up HeimGuard

@@ -5,9 +5,8 @@
 
 ## What is HeimGuard?
 
-HeimGuard is a small and simple library, inspired by [PolicyServer](https://policyserver.io/) and [this talk](https://www.youtube.com/watch?v=Dlrf85NTuAU) by Dominick Baier, built to allow you to easily manage permissions in your .NET projects.
+HeimGuard is a simple library, inspired by [PolicyServer](https://policyserver.io/) and [this talk](https://www.youtube.com/watch?v=Dlrf85NTuAU) by Dominick Baier, that allows you to easily manage permissions in your .NET projects.
 
->  ⭐️ HeimGuard is simple and flexible by design and I hope that it will help many development teams in the .NET community. With that said, it is quite bare bones. If you need a more robust solution, I strongly recommend checking out the commercial version of [Policy Server](https://solliance.net/products/policyserver) for a much more expansive list of features and capabilities.
 
 ## Quickstart
 

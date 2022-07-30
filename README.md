@@ -243,7 +243,7 @@ public static class SimplePermissionStore
 
 #### Database Store
 
-We could also have some entities that we are storing in our application database or maybe in a separate administartion boundary. Notice here how our permissions have a Guid as their key, but we can still get a string out of it using `Name` for our authorization attribute.
+We could also have some entities that we are storing in our application database or maybe in a separate administration boundary. Notice here how our permissions have a Guid as their key, but we can still get a string out of it using `Name` for our authorization attribute.
 
 ```c#
 using System.ComponentModel.DataAnnotations;
@@ -397,11 +397,12 @@ And that's it! I've added a couple extension methods on here as they are recomme
 
 ## HeimGuard Enhancements
 
-There are currently two extensions on HeimGuard that are both optional but highly recommended, especially `AutomaticallyCheckPermissions`.
+There are currently two extensions on HeimGuard that are both optional, but depending on your workflow, may save you a lot of manual work.
 
 ### AutomaticallyCheckPermissions
 
-- `AutomaticallyCheckPermissions` will automatically checks user permissions when an authorization attribute is used. Again, this is optional, but without this, we would need to add something like this to our controller:
+- `AutomaticallyCheckPermissions` will automatically checks user permissions when an authorization attribute is used. Again, this is optional, but without this, we would need 
+- to add something like this to our controller or service/handler that it calls:
 
   ```csharp
   using HeimGuard;
@@ -426,6 +427,11 @@ There are currently two extensions on HeimGuard that are both optional but highl
           return _heimGuard.HasPermissionAsync("RecipesFullAccess") 
             ? Ok()
             : Forbidden();
+  
+          // OR...  
+  
+          await _heimGuard.MustHavePermission<ForbiddenAccessException>(Permissions.CanAddRecipe);          
+          return Ok();
       }
   }
   ```
@@ -454,14 +460,14 @@ Custom policies can still be written and used as they normally would be in .NET.
 Generally:
 
 1. Write a custom requirement that extends Microsoft's `IAuthorizationRequirement`
-2. Write a handler for that requirement so that any involked policy that has the custom requirement in it will leverage it.
+2. Write a handler for that requirement so that any invoked policy that has the custom requirement in it will leverage it.
    * You can use HeimGuard DI in these handlers to easily check if the given user has the permission at all and then perform your custom requirement checks.
 3. Register that handler in startup
 4. Set up your controller
 
 ### ❗️ Important Note
 
-It's important to note that custom policies can not be automically resolved with `AutomaticallyCheckPermissions`. That doens't mean that you have to remove `AutomaticallyCheckPermissions` if you use any custom policies, but you'll need to be deliberate with how you set up your controllers. Sepcifically, you can still add the `Authorize` attribute, but you won't pass it a policy like you normally would. Instead, you'll build the custom requirement and involk your custom handler, which could (and likely should) leverage HeimGuard with DI.
+It's important to note that custom policies can not be automatically resolved with `AutomaticallyCheckPermissions`. That doesn't mean that you have to remove `AutomaticallyCheckPermissions` if you use any custom policies, but you'll need to be deliberate with how you set up your controllers. Sepcifically, you can still add the `Authorize` attribute, but you won't pass it a policy like you normally would. Instead, you'll build the custom requirement and involk your custom handler, which could (and likely should) leverage HeimGuard with DI.
 
 ```c#
 using HeimGuard;
@@ -540,7 +546,7 @@ Then you could call this inside of your controller or in your CQRS handler.
 
 ## Caching
 
-A potentialy downside to this approach of permission mapping is that it can get chatty. If this is causing performance issues for you, one option might be to use a redis cache in your `IUserPolicyHandler` implementation.
+A potentially downside to this approach of permission mapping is that it can get chatty. If this is causing performance issues for you, one option might be to use a redis cache in your `IUserPolicyHandler` implementation.
 
 ## Multiple Policies Per Attribute
 
@@ -553,6 +559,25 @@ options.AddPolicy("ThisThingOrThatThing", policy =>
             (c.Type == "ThisThing" ||
              c.Type == "ThatThing"))));
 ```
+
+Alternatively, you can use the just have the `Authorize` attribute on a controller and manually check for permissions in your controller, handler, service, etc. like so.
+```csharp
+public async Task<RecipeDto> Handle(AddRecipeCommand request, CancellationToken cancellationToken)
+{
+    if(!await _heimGuard.HasPermissionAsync(Permissions.ThisThing) && !await _heimGuard.HasPermissionAsync(Permissions.ThisThing))
+        throw new ForbiddenAccessException();
+    
+    var recipe = Recipe.Create(request.RecipeToAdd);
+    await _recipeRepository.Add(recipe, cancellationToken);
+
+    await _unitOfWork.CommitChanges(cancellationToken);
+
+    var recipeAdded = await _recipeRepository.GetById(recipe.Id, cancellationToken: cancellationToken);
+    return _mapper.Map<RecipeDto>(recipeAdded);
+}
+
+```
+
 
 ## Example
 Check out [this example project](https://github.com/pdevito3/HeimGuardExamplePermissions) for one of many options for setting up HeimGuard

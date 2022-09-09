@@ -469,47 +469,6 @@ Generally:
 
 It's important to note that custom policies can not be automatically resolved with `AutomaticallyCheckPermissions`. That doesn't mean that you have to remove `AutomaticallyCheckPermissions` if you use any custom policies, but you'll need to be deliberate with how you set up your controllers. Sepcifically, you can still add the `Authorize` attribute, but you won't pass it a policy like you normally would. Instead, you'll build the custom requirement and involk your custom handler, which could (and likely should) leverage HeimGuard with DI.
 
-```c#
-using HeimGuard;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
-[ApiController]
-[Route("recipes")]
-public class RecipesController : ControllerBase
-{
-    private readonly IAuthorizationService _authService;
-
-    public RecipesController(IAuthorizationService authService)
-    {
-        _authService = authService;
-    }
-    
-    [HttpGet]
-    [Authorize(Policy = "RecipesFullAccess")]
-    public IActionResult Get()
-    {
-      	return Ok();
-    }
-    
-    [HttpGet]
-		[Authorize]
-    public IActionResult Get()
-    {
-      	var requirement = new CustomRequirement();
-      
-      	// this call with involk the custom handler that uses HeimGuard
-      	var result = _authService.AuthorizeAsync(User, null, requirement);
-      	
-      	return result.Succedded 
-          ? Ok()
-          : Forbidden();
-    }
-}
-```
-
-
-
 ## Tenants
 
 When working in a multitenant app, you might end up having different roles across different tenants. For example, say I am an `Admin` in Organization 1, but a `User` in Organization 2. The `Admin` role will likely add a lot of permissions that the user role wouldnt have, but how do we check what organization the user is in for that particular request?

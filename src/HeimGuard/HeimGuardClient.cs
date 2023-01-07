@@ -46,10 +46,7 @@ namespace HeimGuard
 
         /// <inheritdoc />
         public async Task<bool> HasPermissionAsync(string permission)
-        {
-            var policy = await _userPolicyHandler.GetUserPermissions();
-            return policy.Contains(permission);
-        }
+            => await _userPolicyHandler.HasPermission(permission);
 
         /// <inheritdoc />
         public async Task MustHavePermission<TException>(string permission) 

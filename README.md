@@ -343,7 +343,6 @@ For our [Database Store](#database-store) example above, we have the same 3 step
 **However it is implemented, the only thing that matters here is returning a list of strings as your final permissions.**
 
 ```c#
-
 public class DatabaseUserPolicyHandler : IUserPolicyHandler
 {
     private readonly RecipesDbContext _dbContext;
@@ -374,6 +373,46 @@ public class DatabaseUserPolicyHandler : IUserPolicyHandler
     }
 }
 ```
+
+#### Enhancing Your `HasPermission` Checks
+
+The method `GetUserPermissions()` method requires all permissions for a user to be returned. When using a database, you might want to enhance the permformance of this call. You can do this by having your db use an `Exists` operation. To do this, you can implement the `HasPermission` method on your `UserPolicyHandler`. For example:
+
+```csharp
+
+public class DatabaseUserPolicyHandler : IUserPolicyHandler
+{
+    private readonly RecipesDbContext _dbContext;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public UserPolicyHandler(RecipesDbContext dbContext, IHttpContextAccessor httpContextAccessor)
+    {
+        _dbContext = dbContext;
+        _httpContextAccessor = httpContextAccessor;
+    }
+    
+    public async Task<IEnumerable<string>> GetUserPermissions()
+    {
+        // ...
+    }
+  
+  	public async Task<bool> HasPermission(string permission)
+    {
+        var roles = await GetRoles();
+    
+        // super admins can do everything
+        if (roles.Contains(Role.SuperAdmin().Value))
+            return true;
+        
+        return await _dbContext.RolePermissions
+            .Where(rp => roles.Contains(rp.Role.Name))
+            .Select(rp => rp.Permission.Name)
+            .AnyAsync(x => x == permission);
+    }
+}
+```
+
+
 
 ### Registering HeimGuard
 

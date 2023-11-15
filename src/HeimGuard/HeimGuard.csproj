@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netcoreapp3.1;net5.0;net6.0;net7.0</TargetFrameworks>
+        <TargetFrameworks>netcoreapp3.1;net5.0;net6.0;net7.0;net8.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,11 +24,15 @@
         <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="7.0.1" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+        <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    </ItemGroup>
 
     <PropertyGroup>
-        <AssemblyVersion>0.3.0</AssemblyVersion>
-        <FileVersion>0.3.0</FileVersion>
-        <Version>0.3.0</Version>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
+        <FileVersion>1.0.0</FileVersion>
+        <Version>1.0.0</Version>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/pdevito3/heimguard</RepositoryUrl>
         <RepositoryType>git</RepositoryType>

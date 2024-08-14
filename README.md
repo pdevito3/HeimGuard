@@ -144,7 +144,7 @@ Identity is the input to your permissions that, together, determine a user's per
 }
 ```
 
-This can work, but but there are some downside here:
+This can work, but but there are some downsides here:
 
 - Your JWT gets quickly overloaded, potentially to the point of being too big to even put into a cookie. Ideally, your token is only passing along user identity information only.
 - You don't have boundary permission context. Let's look at a couple examples:
